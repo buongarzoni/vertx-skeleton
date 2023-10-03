@@ -1,0 +1,35 @@
+version: '3'
+services:
+  kotlin-app:
+    depends_on:
+      - postgres
+    container_name: skeleton
+    build:
+      dockerfile: "Dockerfile"
+      context: .
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_PROFILES_ACTIVE=production
+      - DATABASE_USERNAME=chris
+      - DATABASE_PASSWORD=1234
+      - DATABASE_NAME=skeleton
+      - DATABASE_HOST=skeleton-db
+      - DATABASE_PORT=5432
+    networks:
+      - backend
+  postgres:
+    container_name: skeleton-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: skeleton
+      POSTGRES_USER: chris
+      POSTGRES_PASSWORD: 1234
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - backend
+
+networks:
+  backend:
